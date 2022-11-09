@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Juego de la oca</title>
+</head>
+
+<body>
+    <h1>Juego de la oca</h1>
+    <script type="text/javascript">
+        //Constantes de rangos de valores
+        const MIN_DADO = 1;
+        const MAX_DADO = 6;
+        const CASILLA_INICIAL = 1;
+        const CASILLA_FINAL = 63;
+        //Constantes con valores para las casillas
+        const MULTIPLO_CASILLA_OCA = 5;
+        const ULTIMA_OCA = 60;
+        const CASILLA_PUENTE_1 = 6;
+        const CASILLA_PUENTE_2 = 12;
+        const CASILLA_CALAVERA = 53;
+
+        comienzaJuego();
+
+        function comienzaJuego() {
+            victoria = false;
+            var casillaActual = CASILLA_INICIAL;
+            document.write("Estamos en la casilla " + casillaActual + "<br>");
+            while (!victoria) {
+                casillaActual = realizaTirada(casillaActual);
+                document.write("Estamos en la casilla " + casillaActual + "<br>");
+                casillaActual = realizaComprobaciones(casillaActual);
+                if (casillaActual >= CASILLA_FINAL) {
+                    victoria = true;
+                }
+            }
+            document.write("Fin del programa!!!");
+        }
+
+        function realizaTirada(casillaActual) {
+            var valorTirada = generarEnteroRandomInclusivo(MIN_DADO, MAX_DADO);
+            document.write("Lanzamos dado. Sale un: " + valorTirada + "<br>");
+            casillaActual += valorTirada;
+            return casillaActual;
+        }
+
+        function realizaComprobaciones(casillaActual) {
+            //Comprobamos si es una oca
+            if (casillaActual % MULTIPLO_CASILLA_OCA == 0) {
+                //Comprobamos si es la ultima oca
+                if (casillaActual == ULTIMA_OCA) {
+                    document.write("La casilla " + casillaActual + " es una oca. Saltamos a la casilla " +
+                        CASILLA_FINAL + "<br>");
+                    casillaActual = 63;
+                } else {
+                    document.write("La casilla " + casillaActual + " es una oca. Saltamos a la casilla " +
+                        (casillaActual + MULTIPLO_CASILLA_OCA) + "<br>");
+                    casillaActual += MULTIPLO_CASILLA_OCA;
+                }
+            }
+            //Comprobamos si es un puente
+            if (casillaActual == CASILLA_PUENTE_1) {
+                document.write("La casilla " + casillaActual + " es un puente. Saltamos a la casilla " +
+                    CASILLA_PUENTE_2 + "<br>");
+                casillaActual = CASILLA_PUENTE_2;
+            }
+            if (casillaActual == CASILLA_PUENTE_2) {
+                document.write("La casilla " + casillaActual + " es un puente. Volvemos a la casilla " +
+                    CASILLA_PUENTE_1 + "<br>");
+                casillaActual = CASILLA_PUENTE_1;
+            }
+            //Comprobamos si es la calavera
+            if (casillaActual == CASILLA_CALAVERA) {
+                document.write("La casilla " + casillaActual + " es la calavera. Volvemos a la casilla " +
+                    CASILLA_INICIAL + "<br>");
+                casillaActual = CASILLA_INICIAL;
+            }
+            return casillaActual;
+        }
+
+        //FUNCION QUE RECIBE COMO PARAMETRO UN VALOR MAXIMO
+        //Y UN VALOR MINIMO Y DEVUELVE UN VALOR ENTRE ESTOS
+        function generarEnteroRandomInclusivo(min, max) {
+            min = Math.ceil(min);
+            max = Math.floor(max);
+            return Math.floor(Math.random() * (max - min + 1) + min);
+        }
+    </script>
+</body>
+
+</html>

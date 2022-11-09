@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cambia tamaño de la ventana de forma aleatoria cada 10 segundos</title>
+</head>
+
+<body>
+    <h1>Cambia tamaño de la ventana de forma aleatoria cada 10 segundos</h1>
+    <script type="text/javascript">
+        //Constantes de rangos de valores
+        const MIN_DADO = 1;
+        const MAX_DADO = 6;
+        //Constantes numéricas
+        const INTERVALO_TIEMPO = 10;
+        const CONV_MILISEG = 1000;
+        const MULTIPLICADOR_TAMAÑO = 100;
+        //Array con las páginas a buscar
+        const arrPaginasWeb = ["marca.com", "as.com", "sport.com", "cadenaser.com", "abc.com", "elpais.com"];
+
+        //Arranca el programa
+        main();
+
+        function main() {
+            setInterval(funcionTimeout, CONV_MILISEG);
+        }
+
+        function funcionTimeout() {
+            var valorGenerado = generarEnteroRandomInclusivo(MIN_DADO, MAX_DADO);
+            var ventanaNueva = window.open("https://" + arrPaginasWeb[valorGenerado - 1], "",
+                "width=" + (valorGenerado * MULTIPLICADOR_TAMAÑO) + ", height=" + (valorGenerado *
+                    MULTIPLICADOR_TAMAÑO));
+        }
+
+        //FUNCION QUE RECIBE COMO PARAMETRO UN VALOR MAXIMO
+        //Y UN VALOR MINIMO Y DEVUELVE UN VALOR ENTRE ESTOS
+        function generarEnteroRandomInclusivo(min, max) {
+            min = Math.ceil(min);
+            max = Math.floor(max);
+            return Math.floor(Math.random() * (max - min + 1) + min);
+        }
+    </script>
+</body>
+
+</html>

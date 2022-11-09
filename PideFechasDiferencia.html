@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pide fechas hata que la diferencia entre ellas sea inferior o igual a 365 días</title>
+</head>
+
+<body>
+    <h1>Pide fechas hata que la diferencia entre ellas sea inferior o igual a 365 días</h1>
+    <script type="text/javascript">
+        //Constantes con mensajes a enviar
+        const MSG_PIDE_FECHA_1 = "Introduce la primera fecha (formato: DD/MM/YYYY)";
+        const MSG_PIDE_FECHA_2 = "Introduce la segunda fecha (formato: DD/MM/YYYY)";
+        const MSG_PIDE_DIA_PREFERIDO = "Introduce tu dia de la semana preferido (1-7)";
+        //Constantes de rangos de valores
+        const MIN_DIA_SEMANA = 1;
+        const MAX_DIA_SEMANA = 7;
+        //Constantes numéricas
+        const DIFERNCIA_DIAS = 365;
+        const CONV_MS = 1000;
+        const CONV_SEG = 60;
+        const CONV_MIN = 60;
+        const CONV_HOR = 24;
+        //Array con los dias de la semana
+        const arrDias = ["Domingo", "Lunes", "Martes", "Miercoles", "Jueves", "Viernes", "Sabado"];
+
+        //Se inicializa el programa
+        main();
+        document.write("Fin del programa!!!");
+
+        function main() {
+            //Variable que guarda el tiempo en el que se inicia el programa
+            var tiempo = new Date().getTime();
+            var hayDiferencia = false;
+            while (!hayDiferencia) {
+                //El programa pide las fechas sin comprobar la entrada
+                var fecha1Str = prompt(MSG_PIDE_FECHA_1);
+                if (fecha1Str == null) {
+                    return;
+                }
+                var fecha2Str = prompt(MSG_PIDE_FECHA_2);
+                if (fecha2Str == null) {
+                    return;
+                }
+                //Se pide el numero de la semana favorito (rango 1-7)
+                var diaSemanaPreferido = pideValorDentroRango(MSG_PIDE_DIA_PREFERIDO, MIN_DIA_SEMANA, MAX_DIA_SEMANA);
+                //Convertir las fechas a tipo de datos Date
+                var arrFecha1 = fecha1Str.split("/");
+                fecha1 = new Date(arrFecha1[2], arrFecha1[1] - 1, arrFecha1[0]);
+                var arrFecha2 = fecha2Str.split("/");
+                fecha2 = new Date(arrFecha2[2], arrFecha2[1] - 1, arrFecha2[0]);
+                //Comprobar que la diferencia de días no es superior a 365 dias
+                var diff = fecha2.getTime() - fecha1.getTime();
+                var diffDias = diff / (CONV_MS * CONV_SEG * CONV_MIN * CONV_HOR);
+                if (diffDias <= DIFERNCIA_DIAS) {
+                    hayDiferencia = true;
+                    //Se imprimen los resultados
+                    document.write("Listado del calendario entre: " + fecha1Str + " a " + fecha2Str + "<br>");
+                    muestraCalendario(fecha1, fecha2, diffDias, diaSemanaPreferido);
+                    //Mostrar tiempo de ejecución
+                    document.write("<br>Todo el proceso anterior se realizó en: " + (new Date().getTime() - tiempo) /
+                        CONV_MS + " segundos.");
+                }
+            }
+        }
+
+        function muestraCalendario(fecha1, fecha2, diffDias, diaSemanaPreferido) {
+            var año_base = -1;
+            var mes_base = -1;
+            for (var i = 0; i <= diffDias; i++) {
+                //Realiza comprobación de si ha cambiado el año,
+                //si es asi se muestra en pantalla
+                if (año_base != fecha1.getFullYear()) {
+                    año_base = fecha1.getFullYear();
+                    document.write("Año: " + año_base + "<br>");
+                }
+                //Realiza comprobación de si ha cambiado el mes,
+                //si es asi se muestra en pantalla
+                if (mes_base != fecha1.getMonth()) {
+                    mes_base = fecha1.getMonth();
+                    document.write("Mes: " + (mes_base + 1) + "<br>");
+                }
+                //Muestra el dia actual
+                dia = fecha1.getDate();
+                dia_s = fecha1.getDay();
+                //Comprueba si es el día de favorito 
+                if (dia_s == diaSemanaPreferido) {
+                    document.write("Día: " + dia + " - " + arrDias[dia_s] + "**" + "<br>");
+                } else {
+                    document.write("Día: " + dia + " - " + arrDias[dia_s] + "<br>");
+                }
+                fecha1.setDate(fecha1.getDate() + 1);
+            }
+        }
+
+        //FUNCION QUE RECIBE COMO PARAMETROS UN MENSAJE CON LO QUE SE PEDIRÁ (EN ESTE CASO ALUMNOS)
+        //Y EL VALOR MÍNIMO Y MAXIMO QUE PUEDE ALCANZAR, FINALMENTE DEVUELVE EL VALOR QUE SE PIDIÓ
+        function pideValorDentroRango(mensaje, valorMinimo, valorMaximo) {
+            //VARIABLE QUE CIERRA EL PROGRAMA SI SE PULSO CANCELAR EN EL PROMPT
+            var cancelarPrograma = false;
+            do {
+                var cadena = prompt(mensaje);
+                if (cadena != null) {
+                    if (isNaN(cadena)) {
+                        alert("Debes introducir un valor numerico");
+                    } else {
+                        var valorEntero = parseInt(cadena);
+                        if (valorEntero >= valorMinimo && valorEntero <= valorMaximo) {
+                            return valorEntero;
+                        } else {
+                            alert("El valor debe estar en un rango entre el " + valorMinimo + " y el " + valorMaximo);
+                        }
+                    }
+                } else {
+                    cancelarPrograma = true;
+                }
+            } while (!cancelarPrograma);
+            return null;
+        }
+    </script>
+</body>
+
+</html>

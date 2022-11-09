@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Muestra texto introducido en una tabla</title>
+</head>
+
+<body>
+    <h1>Muestra texto introducido en una tabla</h1>
+    <script type="text/javascript">
+        //Constantes con mensajes
+        const MSG_PIDE_COLUMNA = "Introduce el numero de columnas (3-10)";
+        const MSG_PIDE_FILA = "Introduce el numero de filas (3-10)";
+        const MSG_PIDE_TEXTO = "Introduce un texto a mostrar en la tabla (100 tamaño máx)";
+        //Constantes de rangos
+        const TAMAÑO_MIN = 3;
+        const TAMAÑO_MAX = 10;
+        //Constantes numericas
+        const MAX_LONGITUD = 100;
+
+        //Se lanza el programa
+        main();
+        document.write("Fin del programa");
+
+        function main() {
+            var numFilas = pideValorDentroRango(MSG_PIDE_FILA, TAMAÑO_MIN, TAMAÑO_MAX);
+            if (numFilas == null) {
+                return;
+            }
+            var numColumnas = pideValorDentroRango(MSG_PIDE_COLUMNA, TAMAÑO_MIN, TAMAÑO_MAX);
+            if (numColumnas == null) {
+                return;
+            }
+            var texto = pideCadenaTextoLongitud(MSG_PIDE_TEXTO, MAX_LONGITUD);
+            if (texto == null) {
+                return;
+            }
+            //Se pinta la tabla
+            pintarTabla(numFilas, numColumnas, texto);
+        }
+
+        function pintarTabla(numFilas, numColumnas, texto) {
+            var puntero = 0;
+            document.write("<table border='1' cellspacing='0' cellpadding='20'>")
+            //Recorre las filas
+            for (var i = 0; i < numFilas; i++) {
+                document.write("<tr>");
+                //Recorre las columnas
+                for (var j = 0; j < numColumnas; j++) {
+                    //Realiza comprobaciones de si el texto se ha acabado o si 
+                    //es un espacio en blanco
+                    if (texto.charAt(puntero) == " ") {
+                        document.write("<td id='punto_espacio'>.</td>");
+                    } else if (puntero >= texto.length) {
+                        document.write("<td id='punto_final'>.</td>");
+                    } else {
+                        document.write("<td>" + texto.charAt(puntero) + "</td>");
+                    }
+                    puntero++;
+                }
+                document.write("</tr>");
+            }
+            document.write("</table>")
+            //Hace cambios en el color
+            document.getElementById('punto_espacio').style.backgroundColor = 'yellow';
+            document.getElementById('punto_final').style.backgroundColor = 'green';
+        }
+
+        //FUNCION QUE RECIBE UN PARAMETRO UN MENSAJE CON EL VALOR A PEDIR
+        //Y DEVUELVE EL VALOR SI LA CADENA NO ESTÁ VACÍA Y SE CUMPLE LA CONDICIÓN
+        function pideCadenaTextoLongitud(mensaje, tamañoMax) {
+            do {
+                var cadena = prompt(mensaje).trim();
+                if (cadena != null) {
+                    if (cadena != "") {
+                        if (cadena.length <= tamañoMax) {
+                            return cadena;
+                        } else {
+                            alert("El texto no puede tener un tamaño mayor a " + tamañoMax);
+                        }
+                    } else {
+                        alert("Debes de introducir algo, este campo no puede estar vacío");
+                    }
+                } else {
+                    return null;
+                }
+            } while (cadena == "" || cadena.length > tamañoMax);
+        }
+
+        //FUNCION QUE RECIBE COMO PARAMETROS UN MENSAJE CON LO QUE SE PEDIRÁ (EN ESTE CASO ALUMNOS)
+        //Y EL VALOR MÍNIMO Y MAXIMO QUE PUEDE ALCANZAR, FINALMENTE DEVUELVE EL VALOR QUE SE PIDIÓ
+        function pideValorDentroRango(mensaje, valorMinimo, valorMaximo) {
+            //VARIABLE QUE CIERRA EL PROGRAMA SI SE PULSO CANCELAR EN EL PROMPT
+            var cancelarPrograma = false;
+            do {
+                var cadena = prompt(mensaje);
+                if (cadena != null) {
+                    if (isNaN(cadena)) {
+                        alert("Debes introducir un valor numerico");
+                    } else {
+                        var valorEntero = parseInt(cadena);
+                        if (valorEntero >= valorMinimo && valorEntero <= valorMaximo) {
+                            return valorEntero;
+                        } else {
+                            alert("El valor debe estar en un rango entre el " + valorMinimo + " y el " + valorMaximo);
+                        }
+                    }
+                } else {
+                    cancelarPrograma = true;
+                }
+            } while (!cancelarPrograma);
+            return null;
+        }
+    </script>
+</body>
+
+</html>
